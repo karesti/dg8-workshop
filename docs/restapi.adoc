@@ -131,11 +131,11 @@ First let's cd into the current project
 cd $CHE_PROJECTS_ROOT/dg8-workshop-labs/dg8-restapi
 ----
 
-To register protobuf schemas via REST, invoke a POST or PUT in the `___protobuf_metadata` cache as in the following command
+To register protobuf schemas via REST, use the schema management REST API.
 
 [source, shell, role="copypaste"]
 ----
-curl --digest -u developer:$PASSWORD -X POST --data-binary @./pokemon.proto $LB/rest/v2/caches/___protobuf_metadata/pokemon.proto
+curl --digest -u developer:$PASSWORD -X POST --data-binary @./pokemon.proto $LB/rest/v2/schemas/pokemon.proto
 ----
 
 
@@ -146,7 +146,7 @@ Now let's create an indexed cache since we want to retrieve data at speed from o
 
 [source, shell, role="copypaste"]
 ----
-curl --digest -u developer:$PASSWORD -H "Content-Type: application/json" -d '{"distributed-cache":{"mode":"SYNC","indexing":{"auto-config":true,"index":"ALL"}}}' $LB/rest/v2/caches/pokemon
+curl --digest -u developer:$PASSWORD -H "Content-Type: application/json" -d '{"distributed-cache": {"mode": "SYNC","encoding": {"media-type": "application/x-protostream"},"indexing": {"indexed-entities": ["Pokemon"],"enabled": true},"statistics": true}}' $LB/rest/v2/caches/pokemon
 ----
 
 === Bulk loading the REST endpoint
